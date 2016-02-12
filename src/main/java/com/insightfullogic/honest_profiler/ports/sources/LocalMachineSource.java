@@ -144,8 +144,10 @@ public class LocalMachineSource
     private String getUserDir(com.sun.tools.attach.VirtualMachine vm) throws IOException
     {
         final String userDir = vm.getAgentProperties().getProperty(USER_DIR);
-        if (userDir != null)
+        if (userDir != null) {
+        	System.out.println("\n\t=====\n\tUSER DIR: [" + userDir + "]\n\t=======");
             return userDir;
+        }
 
         return vm.getSystemProperties().getProperty(USER_DIR);
     }

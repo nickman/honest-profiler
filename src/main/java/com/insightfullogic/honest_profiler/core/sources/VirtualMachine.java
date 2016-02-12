@@ -83,8 +83,10 @@ public class VirtualMachine implements Comparable<VirtualMachine>
 
     private boolean isLogFile(final Path path)
     {
+    	
         String fileName = path.getFileName().toString();
-        return fileName.endsWith(".hpl") && fileName.startsWith("log-" + id);
+        System.out.println("isLogFile:" + fileName);
+        return fileName.endsWith(".hpl") && fileName.startsWith("log-"); // + id);
     }
 
     @Override

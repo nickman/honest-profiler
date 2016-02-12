@@ -28,4 +28,6 @@ public class Agent
     public static synchronized native void stop();
 
     public static synchronized native boolean isRunning();
+    
+    public static native long getMethodId(final Class<?> type, final String name, final String sig);
 }

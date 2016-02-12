@@ -44,3 +44,8 @@ JNIEXPORT jboolean JNICALL Java_com_insightfullogic_honest_1profiler_core_contro
 
     return prof->isRunning();
 }
+
+extern "C"
+JNIEXPORT jlong JNICALL Java_com_insightfullogic_honest_1profiler_core_control_Agent_getMethodId(JNIEnv *env, jclass klass, const jclass lookupKlazz, const char *name, const char *sig) {
+    return (jlong)env->GetMethodID(lookupKlazz, name, sig);
+}

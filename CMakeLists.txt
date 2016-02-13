@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 project(honest_profiler)
 
-enable_testing()
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "build")
 
@@ -16,7 +16,7 @@ include(CheckFunctionExists)
 ##########################################################
 # Paths
 set(SRC "src/main/cpp")
-set(SRC_TEST "src/test/cpp")
+
 set(BIN "build")
 set(OUTPUT "lagent")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BIN})
@@ -30,13 +30,6 @@ find_package(JNI REQUIRED)
 include_directories(${JAVA_INCLUDE_PATH})
 include_directories(${JAVA_INCLUDE_PATH2})
 
-if (DEFINED ENV{UNITTEST_INCLUDE_DIRS})
-    message("User has configured " $ENV{UNITTEST_INCLUDE_DIRS} " as the unit test include directory")
-    include_directories($ENV{UNITTEST_INCLUDE_DIRS})
-else()
-    pkg_check_modules (unittest++ REQUIRED unittest++)
-    include_directories(${unittest++_INCLUDE_DIRS})
-endif()
 
 # include of gcc 4.8 headers specifically to work around
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=729933
@@ -59,12 +52,6 @@ set(SOURCE_FILES
     ${SRC}/profiler.h
     ${SRC}/stacktraces.h)
 
-set(TEST_FILES
-    ${SRC_TEST}/fixtures.h
-    ${SRC_TEST}/test_circular_queue.cpp
-    ${SRC_TEST}/test.cpp
-    ${SRC_TEST}/test_log_writer.cpp
-    ${SRC_TEST}/test_agent.cpp)
 
 
 ##########################################################
@@ -113,14 +100,4 @@ else()
     target_link_libraries(${OUTPUT} ${JNI_LIBRARIES} dl)
 endif()
 
-add_executable(unitTests ${TEST_FILES})
 
-if (DEFINED ENV{UNITTEST_LIBRARIES})
-    message("User has configured " $ENV{UNITTEST_LIBRARIES} " as the unit test libraries")
-    target_link_libraries(unitTests ${OUTPUT} $ENV{UNITTEST_LIBRARIES})
-else()
-    target_link_libraries(unitTests ${OUTPUT} ${unittest++_LIBRARIES})
-endif()
-
-# make test
-add_test(unitTests ${BIN}/unitTests)

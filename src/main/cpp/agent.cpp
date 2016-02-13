@@ -172,6 +172,7 @@ static void parseArguments(char *options, ConfigurationOptions &configuration) {
     }
 }
 
+
 AGENTEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) {
     IMPLICITLY_USE(reserved);
     int err;
@@ -212,6 +213,11 @@ AGENTEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved
 
     return 0;
 }
+
+AGENTEXPORT jint JNICALL Agent_OnAttach(JavaVM *jvm, char *options, void *reserved) {
+    return Agent_OnLoad(jvm, options, reserved);
+}
+
 
 AGENTEXPORT void JNICALL Agent_OnUnload(JavaVM *vm) {
     IMPLICITLY_USE(vm);

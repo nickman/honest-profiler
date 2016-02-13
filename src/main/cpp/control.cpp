@@ -21,6 +21,10 @@
  */
 
 #include <jvmti.h>
+#include <stdio.h>
+#include <syscall.h> 
+ 
+
 
 #include "profiler.h"
 
@@ -46,6 +50,28 @@ JNIEXPORT jboolean JNICALL Java_com_insightfullogic_honest_1profiler_core_contro
 }
 
 extern "C"
-JNIEXPORT jlong JNICALL Java_com_insightfullogic_honest_1profiler_core_control_Agent_getMethodId(JNIEnv *env, jclass klass, const jclass lookupKlazz, const char *name, const char *sig) {
-    return (jlong)env->GetMethodID(lookupKlazz, name, sig);
+JNIEXPORT jlong JNICALL Java_com_insightfullogic_honest_1profiler_core_control_Agent_getStaticMethodId(JNIEnv *env, jclass klass, const jclass lookupKlazz, const jstring name, const jstring sig) {
+	const char * pname = env->GetStringUTFChars(  name , NULL ) ;
+	const char * psig = env->GetStringUTFChars(  sig , NULL ) ;
+//	jmethodID mid_getName = env->GetMethodID(lookupKlazz, "getName", "()Ljava/lang/String;");
+//	jstring cname = (jstring)env->CallObjectMethod(lookupKlazz, mid_getName);
+//	const char * pcname = env->GetStringUTFChars(  cname , NULL ) ;
+// 	std::cout << "Looking up class:" << lookupKlazz << ", mname:" << pname << ", sig:" << psig << std::endl;
+    return (jlong)env->GetStaticMethodID(lookupKlazz, pname, psig);
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL Java_com_insightfullogic_honest_1profiler_core_control_Agent_getMethodId(JNIEnv *env, jclass klass, const jclass lookupKlazz, const jstring name, const jstring sig) {
+	const char * pname = env->GetStringUTFChars(  name , NULL ) ;
+	const char * psig = env->GetStringUTFChars(  sig , NULL ) ;
+//	jmethodID mid_getName = env->GetMethodID(lookupKlazz, "getName", "()Ljava/lang/String;");
+//	jstring cname = (jstring)env->CallObjectMethod(lookupKlazz, mid_getName);
+//	const char * pcname = env->GetStringUTFChars(  cname , NULL ) ;
+//	std::cout << "Looking up class:" << lookupKlazz << ", mname:" << pname << ", sig:" << psig << std::endl;
+    return (jlong)env->GetMethodID(lookupKlazz, pname, psig);
+}
+
+extern "C"
+JNIEXPORT jint JNICALL Java_com_insightfullogic_honest_1profiler_core_control_Agent_getThreadId(JNIEnv *env, jclass klass) {
+	return syscall(__NR_gettid);
 }

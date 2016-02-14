@@ -44,6 +44,7 @@ void sleep_for_millis(uint period) {
 }
 
 void Processor::run() {
+    std::cout << "Running....\n";
     int popped = 0;
 
     while (true) {
@@ -76,10 +77,11 @@ void callbackToRunProcessor(jvmtiEnv *jvmti_env, JNIEnv *jni_env, void *arg) {
 }
 
 void Processor::start(JNIEnv *jniEnv) {
-    std::cout << "Start\n";
+    std::cout << "Starting...\n";
     jthread thread = newThread(jniEnv);
     jvmtiStartFunction callback = callbackToRunProcessor;
     jvmti_->RunAgentThread(thread, callback, this, JVMTI_THREAD_NORM_PRIORITY);
+    std::cout << "Started\n";
 }
 
 void Processor::stop() {

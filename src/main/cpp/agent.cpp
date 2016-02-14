@@ -174,6 +174,7 @@ static void parseArguments(char *options, ConfigurationOptions &configuration) {
 
 
 AGENTEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved) {
+    logError("LOADING HONEST-AGENT....\n");
     IMPLICITLY_USE(reserved);
     int err;
     jvmtiEnv *jvmti;
@@ -210,6 +211,8 @@ AGENTEXPORT jint JNICALL Agent_OnLoad(JavaVM *jvm, char *options, void *reserved
     Asgct::SetAsgct(Accessors::GetJvmFunction<ASGCTType>("AsyncGetCallTrace"));
 
     prof = new Profiler(jvm, jvmti, CONFIGURATION);
+
+    logError("Created Profiler\n");
 
     return 0;
 }

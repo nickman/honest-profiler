@@ -38,3 +38,4 @@ Testing
 # Eclipse
 .classpath
 .project
+/bin/

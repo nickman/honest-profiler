@@ -94,10 +94,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GLOBAL_WARNINGS} ${GLOBAL_COPTS} -pthr
 
 add_library(${OUTPUT} SHARED ${SOURCE_FILES})
 
-if ("${CMAKE_SYSTEM_NAME}" STREQUAL "FreeBSD") 
-    target_link_libraries(${OUTPUT} ${JNI_LIBRARIES})
-else()
-    target_link_libraries(${OUTPUT} ${JNI_LIBRARIES} dl)
-endif()
+#set_target_properties(${OUTPUT} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+
 
 

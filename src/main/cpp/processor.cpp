@@ -39,6 +39,7 @@ void sleep_for_millis(uint period) {
 #ifdef WINDOWS
     Sleep(period);
 #else
+    //std::cout << "Period: " << period << "\n";
     usleep(period * MILLIS_IN_MICRO);
 #endif
 }

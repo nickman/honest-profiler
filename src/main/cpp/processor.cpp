@@ -61,6 +61,7 @@ void Processor::run() {
         }
 
         if (!isRunning_.load()) {
+            std::cout << "Stop Flag Set. Stopping....\n";
             break;
         }
 
@@ -73,16 +74,24 @@ void Processor::run() {
 void callbackToRunProcessor(jvmtiEnv *jvmti_env, JNIEnv *jni_env, void *arg) {
     IMPLICITLY_USE(jvmti_env);
     IMPLICITLY_USE(jni_env);
-    Processor *processor = (Processor *) arg;
+    Processor *processor = (Processor *) arg;    
     processor->run();
 }
 
 void Processor::start(JNIEnv *jniEnv) {
-    std::cout << "Starting...\n";
-    jthread thread = newThread(jniEnv);
-    jvmtiStartFunction callback = callbackToRunProcessor;
-    jvmti_->RunAgentThread(thread, callback, this, JVMTI_THREAD_NORM_PRIORITY);
-    std::cout << "Started\n";
+     bool actual = isRunning_.load();
+     bool expected = false;
+     bool setTo = true;
+    if(!actual && isRunning_.compare_exchange_weak(expected, setTo, std::memory_order_release, std::memory_order_relaxed)) {
+        std::cout << "Starting...  \n";
+        jthread thread = newThread(jniEnv);
+        jvmtiStartFunction callback = callbackToRunProcessor;
+        jvmti_->RunAgentThread(thread, callback, this, JVMTI_THREAD_NORM_PRIORITY);
+        std::cout << "Started\n";
+    } else {
+        std::cerr << "Already Running.\n";
+    }
+
 }
 
 void Processor::stop() {
